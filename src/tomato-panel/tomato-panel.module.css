@@ -1,0 +1,67 @@
+.potatoPanel {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  background: rgb(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.potatoPanel div {
+  background: rgb(253, 249, 243, 1);
+  width: 400px;
+  height: 240px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.potatoPanel div select {
+  width: 80%;
+  height: 40px;
+  font-size: 20px;
+  text-align-last: center;
+}
+
+.potatoPanel div input {
+  margin-top: 10px;
+  width: 80%;
+  height: 40px;
+  font-size: 20px;
+  text-align-last: center;
+  box-sizing: border-box;
+}
+
+
+
+@keyframes pulse-animation {
+  from {
+    transform: scale(0.8)
+  }
+
+  to {
+    transform: scale(1.2)
+  }
+}
+
+
+.potatoPanel button {
+  width: 60%;
+  height: 40px;
+  background: #2979ff;
+  color: white;
+  font-size: 18px;
+  letter-spacing: .5px;
+  font-weight: 400px;
+  border-radius: 4px;
+  box-shadow: 0 15px 35px rgba(41,121,255,.3),0 5px 15px rgba(0,0,0,.07);
+  margin-top: 25px;
+  cursor: pointer;
+  transition: 3s ease-out;
+  border: none;
+  overflow: initial;
+  animation: pulse-animation 1s cubic-bezier(0.24, 0, 0.38, 1) infinite;
+}

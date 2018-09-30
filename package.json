@@ -1,0 +1,33 @@
+{
+  "name": "my-pomotodo-timer",
+  "version": "0.1.0",
+  "main": "starter.js",
+  "private": true,
+  "dependencies": {
+    "react": "^16.5.2",
+    "react-dom": "^16.5.2",
+    "react-scripts": "^2.0.0"
+  },
+  "homepage": "./",
+  "homepage-explanation": "make index.html use relative path",
+  "scripts": {
+    "electron-prod": "electron starter.js",
+    "electron-win-dev": "set ELECTRON_START_URL=http://localhost:3000 && electron starter.js",
+    "electron-mac-dev": "ELECTRON_START_URL=http://loalhost:3000 electron starter.js",
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  },
+  "devDependencies": {
+    "electron": "^3.0.0",
+    "electron-builder": "^20.28.4",
+    "electron-packager": "^12.1.2"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
+}

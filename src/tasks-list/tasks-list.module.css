@@ -1,0 +1,9 @@
+.wrapper {
+  width: 400px;
+  margin: 0px auto;
+}
+
+.task {
+  border-left: 1px solid #999;
+  padding: 10px;
+}
