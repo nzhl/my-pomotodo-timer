@@ -13,6 +13,8 @@ class App extends React.Component {
   constructor (props) {
     super(props)
     this.handleClockClicked = this.handleClockClicked.bind(this)
+    this.handleDurationChanged = this.handleDurationChanged.bind(this)
+    this.handleTimerStarted = this.handleTimerStarted.bind(this)
     this.handleKeyPressed = this.handleKeyPressed.bind(this)
     this.handleInputChanged = this.handleInputChanged.bind(this)
     this.handleSelectedValueChanged = this.handleSelectedValueChanged.bind(this)
@@ -25,6 +27,8 @@ class App extends React.Component {
     this.state = {
       clockTitle: '点击左边的图标开始计时~',
       clockState: 'ready',
+      clockActived: false,
+      clockDuration: '20',
 
       inputTask: '',
       tasks: [],
@@ -39,7 +43,11 @@ class App extends React.Component {
     return (
       <React.Fragment>
         <ClockPanel title={this.state.clockTitle} 
-          onClockClicked={this.handleClockClicked} />
+          clockDuration={this.state.clockDuration}
+          onDurationChanged={this.handleDurationChanged}
+          clockActived={this.state.clockActived}
+          onClockClicked={this.handleClockClicked}
+          onTimerStarted={this.handleTimerStarted} />
         <InputBar value={this.state.inputTask}
           onKeyPressed={this.handleKeyPressed}
           onInputChanged={this.handleInputChanged} />
@@ -57,7 +65,15 @@ class App extends React.Component {
 
   handleClockClicked () {
     if (this.state.clockState !== 'ready') return
-    this.setState({clockState: 'on'})
+    this.setState({clockActived: true})
+  }
+
+  handleDurationChanged (duration) {
+    this.setState({clockDuration: duration})
+  }
+
+  handleTimerStarted () {
+    this.setState({clockState: 'on', clockActived: false})
 
     const calTime = secondsLeft => {
       let min = Math.floor(secondsLeft / 60)
@@ -66,7 +82,8 @@ class App extends React.Component {
       sec = sec < 10 ? '0' + sec : sec
       return `${min}:${sec}`
     }
-    let secondsLeft = 45 * 60;
+
+    let secondsLeft = this.state.clockDuration * 60;
     this.setState({clockTitle: calTime(secondsLeft)})
     let timer = setInterval(() => {
       --secondsLeft

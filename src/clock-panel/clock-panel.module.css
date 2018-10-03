@@ -13,10 +13,20 @@
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.13);
   z-index: 2;
   box-sizing: border-box;
+  overflow: hidden;
+}
+
+.nav div:nth-child(1) {
+  height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
 }
+
+.nav div.actived {
+  display: none;
+}
+
 
 @keyframes clock-shaking{
   0% { transform: rotate(0deg) }
@@ -32,6 +42,34 @@
   position: relative;
   left: -30px;
   animation: clock-shaking infinite 3s linear;
+  cursor: pointer;
+}
+
+
+.nav div:nth-child(2) {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.select-bar {
+  appearance:none;
+  text-align-last: center;
+  width: 200px;
+  height: 30px;
+  outline: none;
+  border: 1px dashed #999;
+  border-right: 1px solid black;
+}
+
+.start-button {
+  border: 1px dashed #999;
+  border-left: none;
+  width: 30px;
+  height: 30px;
+  background: inherit;
+  outline: none;
   cursor: pointer;
 }
 

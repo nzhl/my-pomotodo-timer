@@ -1,5 +1,6 @@
 import React from 'react'
 
+import BgmBox from '../bgm-box/bgm-box';
 import style from './tomato-panel.module.css'
 
 export default class TomatoPanel extends React.Component {
@@ -26,6 +27,7 @@ export default class TomatoPanel extends React.Component {
             onChange={this.handleCustomizedValueChanged} 
             placeholder="Input your task ~"/>}
         <button onClick={this.handleTomatoSubmitted}>提交</button>
+        <BgmBox />
       </div>
     </div>)
   }

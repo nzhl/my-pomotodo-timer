@@ -11,6 +11,10 @@ let mainWindow
 function createWindow () {
   // Create the browser window.
   mainWindow = new BrowserWindow({width: 600, height: 500})
+  mainWindow.setResizable(false)
+
+  // remove the menu bar
+  Menu.setApplicationMenu(null)
 
   // and load the index.html of the app.
   const startUrl = process.env.ELECTRON_START_URL || url.format(
@@ -22,7 +26,18 @@ function createWindow () {
   mainWindow.loadURL(startUrl);
 
   // Open the DevTools.
-  // mainWindow.webContents.openDevTools()
+  mainWindow.webContents.openDevTools()
+
+  mainWindow.on('show', function () {
+    mainWindow.setSkipTaskbar(false)
+  })
+
+  mainWindow.on('close', function (event) {
+    // for the timer, just let it be hidden inside the tray
+    mainWindow.hide()
+    mainWindow.setSkipTaskbar(true)
+    event.preventDefault();
+  })
 
   // Emitted when the window is closed.
   mainWindow.on('closed', function () {
@@ -40,14 +55,26 @@ function createTray () {
   const iconPath = path.join(__dirname, '/public/favicon.ico')
   tray = new Tray(iconPath)
   const contextMenu = Menu.buildFromTemplate([
-    {label: 'Item1', type: 'radio'},
-    {label: 'Item2', type: 'radio'},
-    {label: 'Item3', type: 'radio', checked: true},
-    {label: 'Item4', type: 'radio'}
+    {
+      label: '显示',
+      click () {
+        mainWindow.show()
+      }
+    },
+    {
+      label: '退出', 
+      click () {
+        mainWindow.destroy() 
+      }
+    },
   ])
-  tray.setToolTip('This is my application.')
+
+  tray.setToolTip('My Pomotodo Timer')
   tray.setContextMenu(contextMenu)
+  tray.on('click', () => mainWindow.show())
 }
+
+
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
@@ -55,7 +82,6 @@ function createTray () {
 app.on('ready', () => {
   createWindow()
   createTray()
-  Menu.setApplicationMenu(null)
 })
 
 // Quit when all windows are closed.
