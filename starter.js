@@ -29,12 +29,21 @@ function createWindow () {
   // mainWindow.webContents.openDevTools()
 
   mainWindow.on('show', function () {
-    mainWindow.setSkipTaskbar(false)
+    // windows only
+    // mainWindow.setSkipTaskbar(false)
+
+    // mac only
+    app.dock.show()
   })
 
   mainWindow.on('close', function (event) {
     // for the timer, just let it be hidden inside the tray
+    // windows only
     mainWindow.hide()
+
+    // mac only
+    app.dock.hide()
+    
     mainWindow.setSkipTaskbar(true)
     event.preventDefault();
   })
@@ -52,7 +61,7 @@ function createWindow () {
 let tray
 
 function createTray () {
-  const iconPath = path.join(__dirname, '/public/favicon.ico')
+  const iconPath = path.join(__dirname, '/public/favicon.png')
   tray = new Tray(iconPath)
   const contextMenu = Menu.buildFromTemplate([
     {
@@ -64,7 +73,8 @@ function createTray () {
     {
       label: '退出', 
       click () {
-        mainWindow.destroy() 
+        mainWindow.destroy()
+        app.quit()
       }
     },
   ])
