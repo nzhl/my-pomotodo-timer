@@ -7,9 +7,11 @@ export default function TasksList (props) {
   return (
     <div className={style.wrapper}>
       {props.tasks.map( task => 
-        <p className={style.task} key={task.name}>
-          {`${task.name} (${task.numOfTomato})`} 
-        </p>)} 
+      <div className={style.task} key={task.name}>
+        <p> {`${task.name} (${task.numOfTomato})`} </p>
+        <button onClick={() => props.removeTask(task.name)}>删除</button>
+      </div>
+      )} 
     </div>
   )
 }

@@ -51,7 +51,8 @@ class App extends React.Component {
         <InputBar value={this.state.inputTask}
           onKeyPressed={this.handleKeyPressed}
           onInputChanged={this.handleInputChanged} />
-        <TasksList tasks={this.state.tasks} />
+        <TasksList tasks={this.state.tasks}
+          removeTask={this.removeTask} />
         {this.state.clockState === 'finish' && 
           <TomatoPanel selectedValue={this.state.selectedValue}
             onSelectedValueChanged={this.handleSelectedValueChanged}
@@ -139,6 +140,11 @@ class App extends React.Component {
       if (each === task) return index
     }
     return -1
+  }
+
+  removeTask = task => {
+    this.setState(
+      {tasks: this.state.tasks.filter(each => each.name != task)})
   }
 
   addTask (task, numOfTomato=0) {

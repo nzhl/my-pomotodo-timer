@@ -14,7 +14,7 @@ function createWindow () {
   mainWindow.setResizable(false)
 
   // remove the menu bar
-  Menu.setApplicationMenu(null)
+  // Menu.setApplicationMenu(null)
 
   // and load the index.html of the app.
   const startUrl = process.env.ELECTRON_START_URL || url.format(
@@ -26,7 +26,7 @@ function createWindow () {
   mainWindow.loadURL(startUrl);
 
   // Open the DevTools.
-  // mainWindow.webContents.openDevTools()
+  mainWindow.webContents.openDevTools()
 
   mainWindow.on('show', function () {
     // windows only
@@ -42,7 +42,7 @@ function createWindow () {
     mainWindow.hide()
 
     // mac only
-    app.dock.hide()
+    // app.dock.hide()
     
     mainWindow.setSkipTaskbar(true)
     event.preventDefault();
