@@ -2,11 +2,27 @@
 const {app, BrowserWindow, Menu, Tray} = require('electron')
 
 const url = require('url')
+const fs = require('fs')
 const path = require('path')
+const FILE_NAME = 'records.json'
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow
+let tray
+
+function initData () {
+  if (!fs.existsSync(FILE_NAME)) {
+    fs.writeFileSync(FILE_NAME, JSON.stringify([]))
+  }
+  let data = fs.readFileSync(FILE_NAME) || "[]"
+  let tasks = JSON.parse(data)
+  global.shared = { tasks }
+}
+
+function saveData () {
+  fs.writeFileSync(FILE_NAME, JSON.stringify(global.shared.tasks))
+}
 
 function createWindow () {
   // Create the browser window.
@@ -26,14 +42,14 @@ function createWindow () {
   mainWindow.loadURL(startUrl);
 
   // Open the DevTools.
-  mainWindow.webContents.openDevTools()
+  // mainWindow.webContents.openDevTools()
 
   mainWindow.on('show', function () {
     // windows only
-    // mainWindow.setSkipTaskbar(false)
+    mainWindow.setSkipTaskbar(false)
 
     // mac only
-    app.dock.show()
+    // app.dock.show()
   })
 
   mainWindow.on('close', function (event) {
@@ -57,9 +73,6 @@ function createWindow () {
   })
 }
 
-
-let tray
-
 function createTray () {
   const iconPath = path.join(__dirname, '/public/favicon.png')
   tray = new Tray(iconPath)
@@ -74,6 +87,7 @@ function createTray () {
       label: '退出', 
       click () {
         mainWindow.destroy()
+        saveData()
         app.quit()
       }
     },
@@ -85,11 +99,11 @@ function createTray () {
 }
 
 
-
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on('ready', () => {
+  initData()
   createWindow()
   createTray()
 })
