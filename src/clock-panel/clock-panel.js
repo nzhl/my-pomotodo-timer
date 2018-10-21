@@ -11,7 +11,6 @@ export default class ClockPanel extends React.Component {
     this.handleClockClicked = this.handleClockClicked.bind(this)
     this.handleDurationChanged = this.handleDurationChanged.bind(this)
     this.handleTimerStarted = this.handleTimerStarted.bind(this)
-
   }
 
   render () {
@@ -54,5 +53,3 @@ export default class ClockPanel extends React.Component {
     this.props.onTimerStarted()
   }
 }
-
-

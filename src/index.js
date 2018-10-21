@@ -1,3 +1,4 @@
+// import electron from 'electron'
 import React from 'react';
 import ReactDOM from 'react-dom';
 import registerServiceWorker from './registerServiceWorker'
@@ -7,6 +8,9 @@ import InputBar from './input-bar/input-bar'
 import TasksList from './tasks-list/tasks-list'
 import TomatoPanel from './tomato-panel/tomato-panel'
 import './index.css';
+
+const electron = window.require('electron')
+
 
 class App extends React.Component {
 
@@ -26,17 +30,21 @@ class App extends React.Component {
 
     this.state = {
       clockTitle: '点击左边的图标开始计时~',
-      clockState: 'ready',
+      clockState: 'ready',  // can be "ready", "on", "paused", "finish"
       clockActived: false,
       clockDuration: '20',
+      secondsLeft: 0,
 
       inputTask: '',
-      tasks: [],
+      tasks: electron.remote.getGlobal('shared').tasks,
 
       selectedValue: '自定义任务',
       customizedValue: '',
-
     }
+  }
+
+  componentWillUnmount () {
+    electron.remote.getGlobal('shared').tasks = this.state.tasks
   }
 
   render () {
@@ -65,8 +73,13 @@ class App extends React.Component {
   }
 
   handleClockClicked () {
-    if (this.state.clockState !== 'ready') return
-    this.setState({clockActived: true})
+    if (this.state.clockState === 'ready') {
+      this.setState({clockActived: true})
+    } else if (this.state.clockState === 'on') {
+      this.setState({clockState: 'paused', clockTitle: '已暂停'})
+    } else if (this.state.clockState === 'paused') {
+      this.handleTimerStarted()
+    }
   }
 
   handleDurationChanged (duration) {
@@ -84,14 +97,20 @@ class App extends React.Component {
       return `${min}:${sec}`
     }
 
-    let secondsLeft = this.state.clockDuration * 60;
+    let secondsLeft = this.state.secondsLeft || this.state.clockDuration * 60;
     this.setState({clockTitle: calTime(secondsLeft)})
     let timer = setInterval(() => {
+      if (this.state.clockState === 'paused') {
+        clearInterval(timer) 
+        this.setState({secondsLeft})
+        return
+      }
+
       --secondsLeft
       this.setState({clockTitle: calTime(secondsLeft)})
       if (secondsLeft === 0) {
         clearInterval(timer)
-        this.setState({clockState: 'finish'})
+        this.setState({clockState: 'finish', secondsLeft})
       }
     },1000)
   }
@@ -144,7 +163,10 @@ class App extends React.Component {
 
   removeTask = task => {
     this.setState(
-      {tasks: this.state.tasks.filter(each => each.name != task)})
+      {tasks: this.state.tasks.filter(each => each.name !== task)},
+      () => {
+        electron.remote.getGlobal('shared').tasks = this.state.tasks
+      })
   }
 
   addTask (task, numOfTomato=0) {
@@ -156,7 +178,9 @@ class App extends React.Component {
     this.setState({tasks: this.state.tasks.concat({
       name: task,
       numOfTomato: numOfTomato,
-    })})
+    })}, () => {
+      electron.remote.getGlobal('shared').tasks = this.state.tasks
+    })
     return true
   }
 
@@ -164,7 +188,9 @@ class App extends React.Component {
     const index = this.findTask(task)
     let tasks =  [...this.state.tasks]
     tasks[index].numOfTomato++
-    this.setState({tasks: tasks})
+    this.setState({tasks}, () => {
+      electron.remote.getGlobal('shared').tasks = this.state.tasks
+    })
   }
 }
 
