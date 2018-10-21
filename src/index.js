@@ -10,7 +10,6 @@ import './index.css';
 
 const electron = window.require('electron')
 
-
 class App extends React.Component {
 
   constructor (props) {
